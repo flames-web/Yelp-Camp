@@ -16,6 +16,7 @@ const passport = require('passport');
 const passportLocal = require('passport-local');
 const User = require('./models/user');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 const {isloggedIn} = require('./middleware');
 const catchAsync = require('./utils/catchAsync');
 const Campground = require('./models/campground')
@@ -48,6 +49,9 @@ app.use(express.urlencoded({extended : true}));
 app.use(methodOverride('_method'));
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(mongoSanitize({
+    replaceWith: '_'
+}))
 
 const secret = 'olalekan247'
 const store = MongoStore.create({
