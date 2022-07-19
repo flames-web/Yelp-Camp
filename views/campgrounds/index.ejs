@@ -1,0 +1,43 @@
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/stylesheet/styles.css">
+    <div id="cluster-map" class="mb-5"></div>
+    <div class="col-sm-10">
+      <form action="/search" method="get">
+      <input type="text" class="form-control form-control-lg" name="search" id="colFormLabelLg" placeholder="Search Campground">
+        <button class="btn mb-5 mt-3" type="submit">Search Campgrounds</button>
+      </form>
+    </div>
+    <h1 class="text-center">All Campgrounds</h1>
+    <div class="container">
+      <div class="row mt-5">
+        <% for(let campground of campgrounds){ %>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <div class="card">
+              <%if(campground.images.length) {%>
+                <img class="img-fluid" alt="" src="<%=campground.images[0].url%>">
+                <% }else {%>
+                <img class="img-fluid" alt=""
+                    src="https://res.cloudinary.com/dcz8fqwkr/image/upload/v1658222000/YelpCamp/kcsg1dctutlfokh5xflf.jpg">
+                <% } %>
+          <div class="card-body">
+            <h5 class="card-title"><%= campground.title %></h5>
+                <h6 class="card-subtitle mb-2 "><%= campground.location %></h6>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item card-text"> <%= campground.description  %></li>
+                  <li class="list-group-item card-text">$ <%= campground.price  %>\Night</li>
+                </ul>
+               <a href="/campgrounds/<%= campground._id  %>" class="btn mr-2"><i class="fas fa-link"></i> View</a>
+          </div>  
+          </div> 
+          </div> 
+        <% } %> 
+      </div>
+    </div>   
+
+    <script>
+      const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+      const campgrounds = { features: <%- JSON.stringify(campgrounds) %>}
+  </script>
+  
+  <script src="/javascript/clusterMap.js"></script>
+     

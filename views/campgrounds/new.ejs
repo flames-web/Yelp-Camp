@@ -1,0 +1,62 @@
+<% layout('layouts/boilerplate') %>
+<div class="col-md-6 offset-md-3">
+  <div class="card shadow">
+      <img src="https://res.cloudinary.com/dcz8fqwkr/image/upload/v1658222000/YelpCamp/kcsg1dctutlfokh5xflf.jpg"
+          alt="" class="card-img-top"/>
+      <div class="card-body">
+          <h5 class="card-title">New Campground</h5>
+          <form action="/campgrounds" method="post" novalidate class="validate-form" enctype="multipart/form-data">
+        
+            <div class="mb-2">
+            <label class="label-control" for="title">Title</label>
+            <input class="form-control" type="text" id="title" name="campground[title]" required>
+            <div class="valid-feedback">
+                Looks good!
+              </div>
+          </div> 
+         
+          <div class="mb-2">
+            <label class="label-control" for="location">Location</label>
+            <input class="form-control" type="text" id="location" name="campground[location]" required>
+            <div class="valid-feedback">
+                Looks good!
+              </div>
+        </div> 
+        <div class="mb-2" >
+            <label class="label-control" for="price">Campground Price</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="campground[price]" placeholder="0.00" required>
+            <span class="input-group-text">.00</span>
+          </div>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+        </div>          
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload Image</label>
+        <input class="form-control" type="file" id="image" name="image" multiple>
+      </div>
+
+        <div class="mb-2">
+            <label class="label-control" for="description">Description</label>
+          <div class="form-floating">
+            <textarea class="form-control"  placeholder="Leave a description here" id="description" name="campground[description]" required></textarea>
+          </div>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+        </div>
+        <div class="d-grid gap-2">
+        <button class="btn btn-outline-primary btn-lg">Add Campground</button>
+      </div>
+    </form>
+       </div>      
+      </div>
+  </div>
+
+       
+
+    
+    
+    
