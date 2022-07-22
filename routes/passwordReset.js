@@ -5,16 +5,8 @@ const crypto = require("crypto");
 const express = require("express");
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-
-
 const nodemailer = require("nodemailer");
-
-// async..await is not allowed in global scope, must use a wrapper
-
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
-  
-
+const {google} = require('googleapis');
 router.get('/', (req,res) => {
     res.render('users/reset')
 })
@@ -34,8 +26,53 @@ router.post("/", catchAsync(
         }
         const link = `${process.env.BASE_URL}/passwordReset/${user._id}/${token.token}`;
         console.log(link);
-       req.flash('success','password reset link sent your account');
-       res.redirect('/passwordReset');
+   const CLIENT_ID = '243294542387-dmv6v4o4o9m9gv4m0mom92f4dda4hs14.apps.googleusercontent.com';
+   const CLEINT_SECRET = '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';
+   const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
+   const REFRESH_TOKEN = '1//04gb6NbsPve5fCgYIARAAGAQSNwF-L9Irx1znH5Wo3bUXJeelnXrvydWGr228RRQonXF-7rt9lyw9_PSWmdBXktnDVIL8ODwuNeo';
+
+const oAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLEINT_SECRET,
+  REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+async function sendMail() {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'rajiolalekanh247@gmail.com',
+        clientId: CLIENT_ID,
+        clientSecret: CLEINT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+
+    const mailOptions = {
+      from: 'Yelp Camp <yours authorised email rajiolalekanh247@gmail.com>',
+      to: email,
+      subject: 'Password Reset',
+      text: link,
+      html: `<a href="${link}">${link}</a>`,
+    };
+
+    const result = await transport.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+sendMail()
+  .then((result) => console.log('Email sent...', result,))
+  .catch((error) => console.log(error.message));
+  req.flash('success','password reset link sent your account');
+  res.redirect('/passwordReset');     
 }
 ))
 
@@ -51,8 +88,9 @@ router.post("/:id/:token", async (req, res) => {
           const {id} = req.params;
           const user = User.findById({id})
           const token = await Token.findOne({id,token : req.params.token})
-          if(!user && !token){
-            req.flash('error','invalid link or expired');
+          if(!user || !token){
+            req.flash('error','invalid link or expired'); 
+            ret
           } 
           const {password,email,confirmPassword} = req.body;
           
@@ -62,7 +100,7 @@ router.post("/:id/:token", async (req, res) => {
            sanitizedUser.save();
            req.flash('Success','password reset sucessfully')
           res.redirect('/campgrounds');
-          });
+          })
           } else {
               req.flash('error','this user does not exist');
               res.redirect('/passwordReset');
