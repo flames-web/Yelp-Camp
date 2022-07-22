@@ -1,4 +1,5 @@
 const User =  require('../models/user');
+const Token = require('../models/token')
 
 module.exports.renderRegister =  (req,res) => {
     res.render('users/register')
@@ -20,8 +21,10 @@ module.exports.register =  async (req,res,next) => {
     }  
 }
 
-module.exports.renderLogin = (req,res) => {
-    res.render('users/login')
+module.exports.renderLogin = async (req,res) => {
+   // const token = await Token.find({})
+    res.render('users/login');
+   // console.log(token)
 }
 
 module.exports.login = (req,res) => {

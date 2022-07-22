@@ -10,6 +10,7 @@ const AppError = require('./utils/AppError');
 const campgroundRoutes = require('./routes/campground');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/user')
+const passwordResetRoutes = require('./routes/passwordReset');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -20,9 +21,12 @@ const mongoSanitize = require('express-mongo-sanitize');
 const {isloggedIn} = require('./middleware');
 const catchAsync = require('./utils/catchAsync');
 const Campground = require('./models/campground')
-const MongoStore  = require('connect-mongo')
+const MongoStore  = require('connect-mongo');
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp1'
+const dbUrl = 
+// process.env.DB_URL
+//  || 
+ 'mongodb://localhost:27017/yelp-camp1'
 
 const mongoose = require('mongoose');
 mongoose.connect(dbUrl,{
@@ -157,7 +161,7 @@ app.get('/search',catchAsync( async(req,res)=> {
          res.render('campgrounds/index',{campgrounds});
 }))
 
-
+app.use("/passwordReset", passwordResetRoutes);
 app.use('/',userRoutes);
 app.use('/campgrounds',campgroundRoutes);
 app.use('/campgrounds/:id/reviews',reviewRoutes);
