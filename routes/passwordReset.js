@@ -90,7 +90,6 @@ router.post("/:id/:token", async (req, res) => {
           const token = await Token.findOne({id,token : req.params.token})
           if(!user || !token){
             req.flash('error','invalid link or expired'); 
-            ret
           } 
           const {password,email,confirmPassword} = req.body;
           
