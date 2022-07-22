@@ -1,11 +1,19 @@
 const  User  = require("../models/user");
 const Token = require("../models/token");
-const  main = require("../utils/sendEmail");
+//const  main = require("../utils/sendEmail");
 const crypto = require("crypto");
 const express = require("express");
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync')
+const catchAsync = require('../utils/catchAsync');
 
+
+const nodemailer = require("nodemailer");
+
+// async..await is not allowed in global scope, must use a wrapper
+
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+  
 
 router.get('/', (req,res) => {
     res.render('users/reset')
@@ -24,13 +32,8 @@ router.post("/", catchAsync(
                 token: crypto.randomBytes(32).toString("hex"),
             }).save();
         }
-        // const link = `${process.env.BASE_URL}/passwordReset/${user._id}/${token.token}`;
-        // const   from = '"Fred Foo 👻" <rajiolalekanh247@gmail.com>', // sender address
-        //       to = email, // list of receivers
-        //       subject = "Hello ✔ Reset Password Link", // Subject line
-        //          text = "Hello world?", // plain text body
-        //         html = " <a href='link'>link</a>", // html body
-
+        const link = `${process.env.BASE_URL}/passwordReset/${user._id}/${token.token}`;
+        console.log(link);
        req.flash('success','password reset link sent your account');
        res.redirect('/passwordReset');
 }
@@ -67,5 +70,7 @@ router.post("/:id/:token", async (req, res) => {
           
       })
     })
-        
+
+    
+    
 module.exports = router;    
