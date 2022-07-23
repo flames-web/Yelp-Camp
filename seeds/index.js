@@ -3,6 +3,7 @@ const Campground = require('../models/campground');
 const cities  = require('./cities');
 const {descriptors , places,tags} = require('./seedHelper');
 
+const dbUrl = process.env.DB_URL
 mongoose.connect('mongodb://localhost:27017/yelp-camp1');
 
 console.log(tags.length)
