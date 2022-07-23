@@ -26,11 +26,12 @@ router.post("/", catchAsync(
         }
         const link = `${process.env.BASE_URL}/passwordReset/${user._id}/${token.token}`;
         console.log(link);
-   const CLIENT_ID = '243294542387-dmv6v4o4o9m9gv4m0mom92f4dda4hs14.apps.googleusercontent.com';
-   const CLEINT_SECRET = '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';
-   const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
-   const REFRESH_TOKEN = '1//04gb6NbsPve5fCgYIARAAGAQSNwF-L9Irx1znH5Wo3bUXJeelnXrvydWGr228RRQonXF-7rt9lyw9_PSWmdBXktnDVIL8ODwuNeo';
 
+        const CLIENT_ID = process.env.CLIENT_ID;
+        const CLEINT_SECRET = process.env.CLEINT_SECRET;
+        const REDIRECT_URI = process.env.REDIRECT_URI;
+        const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+        
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
   CLEINT_SECRET,
@@ -89,7 +90,7 @@ router.post("/:id/:token", async (req, res) => {
           const user = User.findById({id})
           const token = await Token.findOne({id,token : req.params.token})
           if(!user || !token){
-            req.flash('error','invalid link or expired'); 
+            req.flash('error','invalid link or expired');  
           } 
           const {password,email,confirmPassword} = req.body;
           
@@ -106,8 +107,5 @@ router.post("/:id/:token", async (req, res) => {
           }
           
       })
-    })
-
-    
-    
+    })    
 module.exports = router;    
