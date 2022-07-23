@@ -22,12 +22,10 @@ const {isloggedIn} = require('./middleware');
 const catchAsync = require('./utils/catchAsync');
 const Campground = require('./models/campground')
 const MongoStore  = require('connect-mongo');
-//if(process.env.NODE_ENV === 'production'){
 
-//} 
-  // 
   
-  const dbUrl = 'mongodb://localhost:27017/yelp-camp1'
+  
+  const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp1'
  
 
  
