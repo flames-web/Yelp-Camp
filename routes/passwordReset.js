@@ -15,7 +15,7 @@ router.post("/", catchAsync(
     async (req, res) => {
         const {email} = req.body; 
         const user = await User.findOne({ email });
-         if (!user){
+         if (!user && !email){
            req.flash('error',"user with given email doesn't exist")}
            let token = await Token.findOne({ userId: user._id })
            if (!token) {
@@ -89,23 +89,26 @@ router.post("/:id/:token", async (req, res) => {
           const {id} = req.params;
           const user = User.findById({id})
           const token = await Token.findOne({id,token : req.params.token})
-          if(!user || !token){
+          console.log(user,token)
+          if(user && token){
+            const {password,email,confirmPassword} = req.body;
+            User.findByUsername(email).then(function(sanitizedUser){
+            if (sanitizedUser){
+             sanitizedUser.setPassword(password, function(){
+             sanitizedUser.save();
+             req.flash('Success','password reset sucessfully')
+            res.redirect('/campgrounds');
+            })
+            } else {
+                req.flash('error','this user does not exist');
+                res.redirect('/passwordReset');
+            }
+            
+        })
+            
+          } else{
             req.flash('error','invalid link or expired');  
-          } 
-          const {password,email,confirmPassword} = req.body;
-          
-          User.findByUsername(email).then(function(sanitizedUser){
-          if (sanitizedUser){
-           sanitizedUser.setPassword(password, function(){
-           sanitizedUser.save();
-           req.flash('Success','password reset sucessfully')
-          res.redirect('/campgrounds');
-          })
-          } else {
-              req.flash('error','this user does not exist');
-              res.redirect('/passwordReset');
           }
-          
-      })
+         
     })    
 module.exports = router;    

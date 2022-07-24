@@ -26,7 +26,7 @@ const MongoStore  = require('connect-mongo');
   
   
   const dbUrl = process.env.DB_URL;
- 
+
 
  
 
@@ -104,6 +104,7 @@ const scriptSrcUrls = [
     "https://kit.fontawesome.com",
     "https://cdnjs.cloudflare.com",
     "https://cdn.jsdelivr.net",
+    "https://unpkg.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com",
@@ -162,6 +163,14 @@ app.get('/search',catchAsync( async(req,res)=> {
          ]})
          res.render('campgrounds/index',{campgrounds});
 }))
+
+
+// app.get('/campgrounds/:limit', async (req,res) => {
+//     const {limit} = req.params; 
+//     const sort = { length: -1 };
+//     const campgrounds = await  Campground.find({}).sort(sort).limit(limit)
+//     res.render('campgrounds/index',{campgrounds})
+// })
 
 app.use("/passwordReset", passwordResetRoutes);
 app.use('/',userRoutes);

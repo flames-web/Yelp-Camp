@@ -3,14 +3,12 @@ const Campground = require('../models/campground');
 const cities  = require('./cities');
 const {descriptors , places,tags} = require('./seedHelper');
 
-const dbUrl = process.env.DB_URL
 mongoose.connect('mongodb://localhost:27017/yelp-camp1');
-
-console.log(tags.length)
-const db = mongoose.connection;
-db.on('error',console.error.bind(console,'connection error:'));
-db.once('open', () => {
-  console.log('Database Opened');
+  
+  const db = mongoose.connection;
+  db.on('error',console.error.bind(console,'connection error:'));
+  db.once('open', () => {
+    console.log('Database Opened');
 });
 
 const sample = arr => arr[Math.floor(Math.random() *  arr.length)]; 
@@ -22,7 +20,7 @@ const seedDB = async () => {
     const price = Math.floor(Math.random() * 200) + 10;
     const tag = Math.floor(Math.random()* tags.length);
     const camp = new Campground({
-      author: '62d5c1e0335f52cbeb13dc59',
+      author: '62db2395f569b53416d2d5af',
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       description : `${tags[tag].description}`,
