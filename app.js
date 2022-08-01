@@ -23,11 +23,12 @@ const catchAsync = require('./utils/catchAsync');
 const Campground = require('./models/campground')
 const MongoStore  = require('connect-mongo');
 
+const app = express();  
+  
+  const dbUrl =   process.env.DB_URL;
+  // 'mongodb://localhost:27017/yelp-camp1'
   
   
-  const dbUrl =   'mongodb://localhost:27017/yelp-camp1'
-  
-  // process.env.DB_URL;
   
 
 
@@ -37,7 +38,6 @@ const MongoStore  = require('connect-mongo');
 const mongoose = require('mongoose');
 mongoose.connect(dbUrl,{
     useNewUrlParser : true ,
-    // useCreateIndex : true,
     useUnifiedTopology : true
     });
 
@@ -48,7 +48,7 @@ db.once('open', () => {
   console.log('Database Opened');
 })
 
-const app = express();
+
 
 app.engine('ejs',ejsMate);
 
