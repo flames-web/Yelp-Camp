@@ -6,12 +6,12 @@
           alt="" class="card-img-top"/>
       <div class="card-body">
           <h5 class="card-title">Edit Campground</h5>
-          <form action="/campgrounds/<%= campground._id %>?_method=PUT " method="post" class="validate-form" enctype="multipart/form-data" novalidate>
+       <form action="/campgrounds/<%= campground._id %>?_method=PUT " method="post" class="validate-form" enctype="multipart/form-data" novalidate>
         
         
         
 
-            <div class="mb-3">
+          <div class="mb-3">
             <label class="label-control" for="title">Title</label>
             <input class="form-control" type="text" id="title" name="campground[title]" value="<%= campground.title  %> " required>
           </div> 
@@ -19,9 +19,9 @@
           <div class="mb-3">
             <label class="label-control" for="location">Location</label>
             <input class="form-control" type="text" id="location" name="campground[location]" value="<%= campground.location  %> " required>
-        </div> 
+          </div> 
 
-        <div class="mb-3" >
+          <div class="mb-3" >
             <label class="label-control" for="price">Campground Price</label>
             <div class="input-group">
             <span class="input-group-text">$</span>
@@ -30,13 +30,13 @@
           </div>
       </div>  
 
-      <div class="mb-3">
-        <label for="image" class="form-label">Upload Image</label>
-        <input class="form-control" type="file" id="image" name="image" multiple>
-      </div>
+          <div class="mb-3">
+             <label for="image" class="form-label">Upload Image</label>
+             <input class="form-control" type="file" id="image" name="image" multiple>
+           </div>
 
         <div class="mb-3">
-            <label class="label-control" for="description">Description</label>
+               <label class="label-control" for="description">Description</label>
         <div class="form-floating">
             <textarea class="form-control"  placeholder="Leave a description here" id="description" name="campground[description]" required ><%= campground.description  %></textarea>
           </div>
@@ -49,7 +49,7 @@
           </div>
           <label for="image-<%=i%>">Delete?</label>
           <% })%>
-      </div>
+     </div>
 
         <div class="d-grid gap-2">
         <button class="btn btn-outline-primary btn-lg">Update Campground</button>
@@ -58,6 +58,6 @@
     </form>
        </div>      
       </div>
-  </div>
-   
+</div>
+   ,
     

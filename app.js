@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const express = require('express');
+const mongoose = require('mongoose');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
@@ -25,17 +26,9 @@ const MongoStore  = require('connect-mongo');
 
 const app = express();  
   
-  const dbUrl =   process.env.DB_URL;
-  // 'mongodb://localhost:27017/yelp-camp1'
-  
-  
-  
+  const dbUrl =   'mongodb://localhost:27017/yelp-camp1'
+//   process.env.DB_URL;
 
-
-
- 
-
-const mongoose = require('mongoose');
 mongoose.connect(dbUrl,{
     useNewUrlParser : true ,
     useUnifiedTopology : true
@@ -49,7 +42,6 @@ db.once('open', () => {
 })
 
 
-
 app.engine('ejs',ejsMate);
 
 app.set('view engine','ejs')
@@ -57,7 +49,6 @@ app.set('views',path.join(__dirname,'views'));
 
 app.use(express.urlencoded({extended : true}));
 app.use(methodOverride('_method'));
-
 app.use(express.static(path.join(__dirname,'public')));
 app.use(mongoSanitize({
     replaceWith: '_'
@@ -96,8 +87,6 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use(helmet());
-
-//app.use(helmet.crossOriginEmbedderPolicy());
 
 app.use(helmet.crossOriginEmbedderPolicy({ policy: "credentialless" }));
 
@@ -159,22 +148,19 @@ app.get('/', (req,res) => {
 })
 
 app.get('/search',catchAsync( async(req,res)=> {
+    const perPage = 8;
+    const page = parseInt(req.query.page);
     const campgrounds = await Campground.find(
         {$or:[
-            {location:{'$regex':req.query.search}},
-            {title:{'$regex':req.query.search}},
-            {description:{'$regex':req.query.search}}
-         ]})
-         res.render('campgrounds/index',{campgrounds});
+            {location:{'$regex':req.query.search,$options: "i"}},
+            {title:{'$regex':req.query.search,$options: "i"}},
+            {description:{'$regex':req.query.search,$options: "i"}}
+         ]}).sort('-createdAt').skip(perPage * page - perPage).limit(perPage);
+    const count = await Campground.count().sort('-createdAt').skip(perPage * page - perPage).limit(perPage);     
+         res.render('campgrounds/index',{campgrounds,pages: Math.ceil(count / perPage),home: "/campgrounds/?",current: page,});
 }))
 
 
-// app.get('/campgrounds/:limit', async (req,res) => {
-//     const {limit} = req.params; 
-//     const sort = { length: -1 };
-//     const campgrounds = await  Campground.find({}).sort(sort).limit(limit)
-//     res.render('campgrounds/index',{campgrounds})
-// })
 
 app.use("/passwordReset", passwordResetRoutes);
 app.use('/',userRoutes);

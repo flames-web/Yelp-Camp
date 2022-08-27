@@ -6,7 +6,7 @@ const Review = require('../models/review');
 const {  reviewSchema } = require('../schemas');
 const catchError = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
-const { isLoggedIn, validateReview, isReviewAuthor } = require('../middleware');
+const { isReviewAuthor,isLoggedIn,validateReview } = require('../middleware');
 
 
 

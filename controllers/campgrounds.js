@@ -5,8 +5,11 @@ const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const {cloudinary} = require('../cloudinary');
 
 module.exports.index = async (req,res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index',{campgrounds})
+    const perPage = 8;
+    let page = parseInt(req.query.page);
+    const campgrounds = await Campground.find({}).sort('-createdAt').skip(perPage * page - perPage).limit(perPage);
+    const count = await Campground.count();
+    res.render('campgrounds/index',{campgrounds,pages: Math.ceil(count / perPage),home: "/campgrounds/?",current: page,})
 }
 
 module.exports.renderNewForm = (req,res) => {
@@ -23,7 +26,6 @@ module.exports.createCampground = async (req,res) => {
     campground.author = req.user._id; 
     campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     await campground.save()
-
     req.flash('success','Welcome you have created a new campground');
     res.redirect(`/campgrounds/${campground._id}`);
 }
@@ -72,4 +74,4 @@ module.exports.deleteCampgrounds = async (req,res) => {
     await Campground.findByIdAndDelete(req.params.id);
     req.flash('success',  'Successfully deleted a campground');
     res.redirect('/campgrounds');
-  }
+}

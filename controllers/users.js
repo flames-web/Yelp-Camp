@@ -54,7 +54,7 @@ module.exports.register =  async (req,res,next) => {
              return error;
            }
          }
-         sendMail()
+           sendMail()
            .then((result) => console.log('Email sent...', result,))
            .catch((error) => console.log(error.message));
              req.flash('success', 'Welcome to yelp-camp');
@@ -67,9 +67,7 @@ module.exports.register =  async (req,res,next) => {
 }
 
 module.exports.renderLogin = async (req,res) => {
-   // const token = await Token.find({})
-    res.render('users/login');
-   // console.log(token)
+   res.render('users/login');
 }
 
 module.exports.login = (req,res) => {
@@ -86,4 +84,3 @@ module.exports.logout =  (req,res,next) => {
    res.redirect('/campgrounds')
    });
 }
-
